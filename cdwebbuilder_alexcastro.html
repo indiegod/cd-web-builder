@@ -1,0 +1,1354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive SPA: Crazy Domains AI Web Builder Strategy</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FFFFFF; /* Pure white for Apple-like background */
+            color: #1D1D1F; /* Very dark gray for main text */
+            scroll-behavior: smooth;
+        }
+        .sticky-nav {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background-color: rgba(255, 255, 255, 0.95); /* Slightly transparent white for sticky nav */
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid #E0E0E0; /* Subtle border */
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px; 
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px; 
+            max-height: 400px;
+        }
+        @media (max-width: 768px) { /* Smaller height on mobile/tablet */
+            .chart-container {
+                height: 300px;
+                max-height: 350px;
+            }
+        }
+        .card {
+            background-color: #FFFFFF;
+            border-radius: 0.75rem; /* rounded-xl */
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.03); /* Very subtle shadow */
+            padding: 1.5rem; /* p-6 */
+            margin-bottom: 2.5rem; /* Increased margin for more breathing room */
+            border: 1px solid #F0F0F0; /* Light border for definition */
+        }
+        .text-main-headings { color: #00A000; } /* Vibrant Green */
+        .text-sub-headings { color: #333333; } /* Darker gray for subheads */
+        .text-highlight { color: #00A000; } 
+        .bg-primary-accent { background-color: #00A000; }
+        .border-primary-accent { border-color: #00A000; }
+        
+        .nav-link {
+            padding: 0.75rem 1rem;
+            color: #4A4A4A; /* Dark gray for nav links */
+            font-weight: 500;
+            transition: color 0.3s ease, background-color 0.3s ease;
+            border-radius: 0.375rem;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: #00A000; /* Green on hover/active */
+            background-color: transparent; /* No background fill on hover/active */
+            text-decoration: underline; /* Subtle underline on hover/active */
+            text-underline-offset: 4px;
+            text-decoration-thickness: 1.5px;
+        }
+        .section-intro {
+            font-size: 1.125rem;
+            line-height: 1.75rem;
+            color: #5a5a5a;
+            margin-bottom: 2rem; /* Increased margin */
+            max-width: 3xl;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1.5rem; /* Increased margin */
+            margin-bottom: 1.5rem;
+        }
+        th, td {
+            border: 1px solid #E0E0E0; /* Lighter, cooler border */
+            padding: 0.85rem 1rem; /* Slightly more padding */
+            text-align: left;
+            font-size: 0.875rem;
+            line-height: 1.4;
+        }
+        th {
+            background-color: #F8F8F8; /* Light gray for table headers */
+            font-weight: 600;
+            color: #333333;
+        }
+        tbody tr:nth-child(odd) {
+            background-color: #FAFAFA; /* Very subtle off-white for odd rows */
+        }
+        .tooltip {
+            background-color: rgba(0,0,0,0.85); /* Darker tooltip background */
+            color: white;
+            padding: 6px 12px; /* Slightly more padding */
+            border-radius: 6px; /* More rounded */
+            font-size: 0.8rem; /* Slightly smaller font */
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s;
+            white-space: pre-wrap; /* For multi-line tooltips */
+        }
+        .hero-banner {
+            background-color: #00A000; /* Dominant green background */
+            position: relative;
+        }
+        .hero-banner .container {
+            position: relative;
+            z-index: 10;
+        }
+        details {
+            background-color: #FFFFFF; /* White background for details */
+            border: 1px solid #E0E0E0; /* Light border */
+            border-radius: 0.75rem; /* More rounded */
+            margin-bottom: 1rem; /* Increased margin */
+            transition: box-shadow 0.2s ease-in-out;
+        }
+        details:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); /* Subtle hover shadow */
+        }
+        summary {
+            font-weight: 600;
+            padding: 1rem 1.25rem; /* More padding */
+            cursor: pointer;
+            outline: none;
+            color: #007000; /* Darker green for summary text */
+            list-style: none;
+            position: relative;
+            font-size: 1rem; /* Slightly larger summary font */
+        }
+        summary::-webkit-details-marker {
+            display: none;
+        }
+        summary::before {
+            content: '+';
+            position: absolute;
+            right: 1.25rem; /* Align with padding */
+            font-size: 1.5rem; /* Larger icon */
+            top: 50%;
+            transform: translateY(-50%);
+            transition: transform 0.2s ease-in-out;
+            color: #888; /* Gray icon */
+        }
+        details[open] summary::before {
+            content: '-';
+            transform: translateY(-50%) rotate(0deg); /* No rotation for minus */
+        }
+        details > div {
+            padding: 0.75rem 1.25rem 1.25rem 1.25rem; /* More padding */
+            border-top: 1px solid #E0E0E0; /* Light border */
+            font-size: 0.95rem; /* Slightly larger content font */
+            line-height: 1.6;
+            color: #4A4A4A;
+        }
+        /* Flowchart specific styles */
+        .flowchart-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background-color: #F8F8F8; /* Light background for flowchart */
+            border-radius: 0.5rem;
+            border: 1px solid #E0E0E0;
+        }
+        .flow-step {
+            background-color: #FFFFFF;
+            border: 1px solid #D0D0D0;
+            border-radius: 0.5rem;
+            padding: 0.75rem 1rem;
+            margin-bottom: 0.75rem;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #333333;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+            position: relative;
+            width: 90%; /* Adjust width for responsiveness */
+            max-width: 300px; /* Max width for steps */
+        }
+        .flow-arrow {
+            width: 2px;
+            height: 20px;
+            background-color: #A0A0A0; /* Gray arrow */
+            position: relative;
+            margin-bottom: 0.75rem;
+        }
+        .flow-arrow::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%) translateY(100%);
+            width: 0;
+            height: 0;
+            border-left: 6px solid transparent;
+            border-right: 6px solid transparent;
+            border-top: 8px solid #A0A0A0; /* Arrowhead */
+        }
+        /* Source button styles */
+        .source-button {
+            display: block; /* Make it block-level for full clickable area */
+            background-color: #F8F8F8; /* Light gray background */
+            border: 1px solid #E0E0E0; /* Subtle border */
+            border-radius: 0.5rem; /* Rounded corners */
+            padding: 0.75rem 1rem; /* Padding */
+            text-align: left; /* Align text left */
+            font-size: 0.75rem; /* Smaller font */
+            line-height: 1.3;
+            color: #6A6A6A; /* Lighter gray text */
+            text-decoration: none; /* Remove underline */
+            transition: background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02); /* Very subtle shadow */
+        }
+        .source-button:hover {
+            background-color: #EFEFEF; /* Slightly darker on hover */
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05); /* Slightly more prominent shadow on hover */
+        }
+        .source-button strong {
+            color: #4A4A4A; /* Darker text for source number/title */
+        }
+        .source-button .source-link {
+            color: #007000; /* Darker green for links */
+            text-decoration: none;
+        }
+        .source-button .source-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Modal styles */
+        .llm-modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1000; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+            justify-content: center;
+            align-items: center;
+        }
+        .llm-modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 90%;
+            max-width: 700px;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            position: relative;
+        }
+        .llm-close-button {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .llm-close-button:hover,
+        .llm-close-button:focus {
+            color: black;
+            text-decoration: none;
+        }
+        .llm-loading-indicator {
+            display: none;
+            text-align: center;
+            padding: 20px;
+            font-size: 1.2rem;
+            color: #007000;
+        }
+        .llm-input-group {
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+            display: flex;
+            gap: 0.5rem;
+        }
+        .llm-input-group input[type="text"] {
+            flex-grow: 1;
+            padding: 0.5rem;
+            border: 1px solid #ccc;
+            border-radius: 0.25rem;
+        }
+        .llm-input-group button {
+            padding: 0.5rem 1rem;
+            background-color: #00A000;
+            color: white;
+            border-radius: 0.25rem;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="py-6 bg-white text-center border-b border-gray-200 shadow-sm">
+        <h1 class="text-3xl md:text-4xl font-bold text-main-headings">Crazy Domains AI Web Builder: Strategic Blueprint</h1>
+        <p class="mt-2 text-md text-gray-500">An Interactive Guide to Market Dominance</p>
+    </header>
+
+    <section class="hero-banner py-16 md:py-24 text-center">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl md:text-5xl font-bold text-white leading-tight mb-4">
+                Unlock Australian Online Dominance with AI
+            </h2>
+            <p class="text-lg md:text-xl text-white max-w-3xl mx-auto">
+                Discover the strategic blueprint for Crazy Domains to lead the AI-powered web building market by transforming challenges into unparalleled customer value.
+            </p>
+        </div>
+    </section>
+
+    <nav id="mainNav" class="sticky-nav shadow-sm border-b border-gray-200">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-wrap justify-center items-center py-2 text-sm">
+                <a href="#executiveSummary" class="nav-link">Executive Summary</a>
+                <a href="#marketAnalysis" class="nav-link">Market Analysis</a>
+                <a href="#competitiveLandscape" class="nav-link">Competitors</a>
+                <a href="#currentStanding" class="nav-link">CD's AI Builder</a>
+                <a href="#strategicPositioning" class="nav-link">Positioning</a>
+                <a href="#marketingStrategies" class="nav-link">Marketing</a>
+                <a href="#recommendations" class="nav-link">Recommendations</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto px-4 md:px-6 py-8">
+
+        <section id="executiveSummary" class="pt-8 mb-12">
+            <h2 class="text-2xl md:text-3xl font-bold text-main-headings mb-6 text-center">Executive Summary</h2>
+            <p class="section-intro">
+                This interactive application translates the "Strategic Blueprint for Crazy Domains Australia" into an explorable format. It outlines how Crazy Domains, leveraging its AI web builder, can navigate the evolving Australian digital landscape, address critical customer experience gaps, and implement strategies for market dominance.
+            </p>
+            <div class="card">
+                <p class="text-gray-700 leading-relaxed mb-4">
+                    The Australian generative AI market is poised for significant growth (<strong class="text-highlight">35.4% CAGR by 2030</strong>)<a href="#source-2" class="text-xs align-super">2</a>, with <strong class="text-highlight">35% of SMEs already adopting AI</strong><a href="#source-2" class="text-xs align-super">2</a><a href="#source-3" class="text-xs align-super">3</a><a href="#source-4" class="text-xs align-super">4</a><a href="#source-21" class="text-xs align-super">21</a> and <strong class="text-highlight">60% planning to by 2026</strong><a href="#source-2" class="text-xs align-super">2</a><a href="#source-3" class="text-xs align-super">3</a><a href="#source-4" class="text-xs align-super">4</a><a href="#source-21" class="text-xs align-super">21</a>. However, a substantial "awareness gap" exists, with many SMBs hesitant or uninformed about AI's full potential<a href="#source-5" class="text-xs align-super">5</a><a href="#source-6" class="text-xs align-super">6</a>. Crazy Domains, with its AI-powered web builder and local infrastructure, is positioned to capitalize on this but is undermined by customer complaints regarding support, stability, and pricing<a href="#source-7" class="text-xs align-super">7</a><a href="#source-8" class="text-xs align-super">8</a><a href="#source-9" class="text-xs align-super">9</a>.
+                </p>
+                <p class="text-gray-700 leading-relaxed mb-6">
+                    The core strategy involves a dual approach: a radical overhaul of customer service and pricing transparency, coupled with targeted marketing that highlights the AI web builder's practical, problem-solving capabilities.
+                </p>
+                <div class="text-center">
+                     <button id="togglePillarsBtn" class="bg-primary-accent text-white px-6 py-3 rounded-lg hover:opacity-90 transition-opacity text-sm font-semibold">View Key Strategic Pillars</button>
+                </div>
+                <div id="pillarsContainer" class="mt-6 hidden p-4 bg-gray-50 rounded-md">
+                    <h3 class="text-lg font-semibold text-sub-headings mb-3">Core Strategic Pillars for Dominance:</h3>
+                    <ul class="list-disc list-inside text-gray-700 space-y-2 text-sm">
+                        <li><span class="inline-block mr-2">🛠️</span><strong>Radical Customer Experience Overhaul:</strong> Prioritize and invest heavily in improving customer support responsiveness, knowledge, and issue resolution. Enhance platform stability and proactive communication.</li>
+                        <li><span class="inline-block mr-2">💡</span><strong>Absolute Pricing Transparency:</strong> Eliminate hidden fees and aggressive upselling. Clearly display renewal rates and make add-ons strictly opt-in. Re-evaluate plan bundling for better value.</li>
+                        <li><span class="inline-block mr-2">🎯</span><strong>AI Impact & Problem-Solving Marketing:</strong> Shift narrative from "we have AI" to "our AI solves your problems." Educate SMBs on tangible benefits, showcase success stories, and emphasize AI quality.</li>
+                        <li><span class="inline-block mr-2">🌐</span><strong>Leverage Local Advantage & All-in-One Appeal:</strong> Reinforce "Aussie-first" benefits and streamline service integration for a true all-in-one solution.</li>
+                        <li><span class="inline-block mr-2">📈</span><strong>Continuous Product Enhancement:</strong> Invest in AI quality, feature integration, and clear scalability pathways for the web builder.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="marketAnalysis" class="pt-16 mb-12">
+            <h2 class="text-2xl md:text-3xl font-bold text-main-headings mb-6 text-center">Market Analysis: Australian AI & Web Building Landscape</h2>
+            <p class="section-intro">
+                The Australian market presents a fertile ground for AI-driven web solutions. This section explores AI adoption trends among SMEs, identifies their common web building challenges, and outlines evolving consumer preferences that Crazy Domains must address.
+            </p>
+            <div class="card">
+                <h3 class="text-xl font-semibold text-sub-headings mb-4">AI Adoption Among Australian SMEs</h3>
+                <p class="text-gray-700 mb-4">AI is the leading tech trend for 2025 in Australia. The generative AI market is projected to hit US$1,501.9M by 2030 (<strong class="text-highlight">35.4% CAGR</strong>)<a href="#source-2" class="text-xs align-super">2</a><a href="#source-20" class="text-xs align-super">20</a>. Currently, <strong class="text-highlight">35% of Australian SMEs have adopted AI</strong><a href="#source-2" class="text-xs align-super">2</a><a href="#source-3" class="text-xs align-super">3</a><a href="#source-4" class="text-xs align-super">4</a><a href="#source-21" class="text-xs align-super">21</a>, with <strong class="text-highlight">60% planning integration by 2026</strong><a href="#source-2" class="text-xs align-super">2</a><a href="#source-3" class="text-xs align-super">3</a><a href="#source-4" class="text-xs align-super">4</a><a href="#source-21" class="text-xs align-super">21</a>. Adoption varies by industry (Health/Education/Manufacturing: <strong class="text-highlight">45%</strong><a href="#source-2" class="text-xs align-super">2</a><a href="#source-3" class="text-xs align-super">3</a><a href="#source-4" class="text-xs align-super">4</a><a href="#source-21" class="text-xs align-super">21</a>; Agriculture: <strong class="text-highlight-negative">6%</strong>)<a href="#source-2" class="text-xs align-super">2</a><a href="#source-3" class="text-xs align-super">3</a><a href="#source-4" class="text-xs align-super">4</a><a href="#source-21" class="text-xs align-super">21</a> and region (Regional SMEs <strong class="text-highlight-negative">11% less likely to adopt</strong>)<a href="#source-2" class="text-xs align-super">2</a><a href="#source-3" class="text-xs align-super">3</a>.
+                </p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                    <div>
+                        <div class="chart-container mb-6">
+                            <canvas id="aiAdoptionOverallChart"></canvas>
+                        </div>
+                        <p class="text-xs text-gray-500 text-center mt-2">Overall AI adoption rate among Australian SMEs in 2024. Source: [2, 3, 4, 21]</p>
+                    </div>
+                    <div>
+                        <div class="chart-container mb-6">
+                            <canvas id="aiAdoptionByIndustryChart"></canvas>
+                        </div>
+                        <p class="text-xs text-gray-500 text-center mt-2">AI adoption rates across key Australian industries. Source: [2, 3, 4, 21]</p>
+                    </div>
+                </div>
+
+                <p class="text-gray-700 mb-2 mt-6"><strong class="text-highlight">The Awareness Gap:</strong> Crazy Domains' survey indicates only <strong class="text-highlight-negative">32% of Australian SMBs currently use AI tools</strong><a href="#source-5" class="text-xs align-super">5</a><a href="#source-6" class="text-xs align-super">6</a>, and a mere <strong class="text-highlight-negative">24% believe AI will be a key driver</strong> for their business<a href="#source-5" class="text-xs align-super">5</a><a href="#source-6" class="text-xs align-super">6</a>. This highlights a major educational opportunity.</p>
+                
+                <div class="chart-container mb-6">
+                    <canvas id="regionalAwarenessChart"></canvas>
+                </div>
+                <p class="text-xs text-gray-500 text-center mt-2">AI awareness gap: Regional vs. Metro SMEs (percentage unaware of AI potential). Source: [2, 3]</p>
+
+
+                <p class="text-gray-700 mt-6"><strong class="text-highlight">Benefits for Adopters:</strong> <strong class="text-highlight">88% of SMEs using AI report revenue growth</strong><a href="#source-5" class="text-xs align-super">5</a><a href="#source-21" class="text-xs align-super">21</a>, using it for data entry, fraud detection, marketing automation, etc.<a href="#source-2" class="text-xs align-super">2</a><a href="#source-3" class="text-xs align-super">3</a><a href="#source-4" class="text-xs align-super">4</a>.
+                </p>
+
+                <h3 class="text-xl font-semibold text-sub-headings mt-8 mb-4">SME Web Building Pain Points</h3>
+                <details class="mb-2">
+                    <summary><span class="inline-block mr-2">❌</span>Lack of Marketing Strategy</summary>
+                    <div>Many small businesses lack a clear marketing plan, strategy, and design, often just desiring a "pretty site" without understanding how it integrates with their overall business objectives or target customers. This means they need guidance beyond just the technical build<a href="#source-64" class="text-xs align-super">64</a>.</div>
+                </details>
+                <details class="mb-2">
+                    <summary><span class="inline-block mr-2">⚙️</span>Technical Complexity and Coding</summary>
+                    <div>The traditional method of website creation can be time-consuming, expensive, and overwhelming, often requiring coding and technical expertise that small business owners lack<a href="#source-23" class="text-xs align-super">23</a>.</div>
+                </details>
+                <details class="mb-2">
+                    <summary><span class="inline-block mr-2">⚠️</span>Platform Limitations and Scalability</summary>
+                    <div>Many small business owners start with easy-to-use platforms like Wix or Squarespace but find them limited and hard to scale as their business grows. This often necessitates rebuilding their entire site on more flexible platforms like WordPress, leading to unexpected costs and time investment. The desire for a site that "grows with them" is a key preference<a href="#source-64" class="text-xs align-super">64</a>.</div>
+                </details>
+                <details class="mb-2">
+                    <summary><span class="inline-block mr-2">💰</span>Cost Concerns</summary>
+                    <div>While website builders are generally affordable, the cost can still be a barrier, especially for bespoke websites or those with advanced features<a href="#source-23" class="text-xs align-super">23</a><a href="#source-50" class="text-xs align-super">50</a>.</div>
+                </details>
+                <details class="mb-2">
+                    <summary><span class="inline-block mr-2">🔒</span>Digital Trust and Credibility</summary>
+                    <div>Australian consumers increasingly rely on the internet for products and services. auDA research indicates that <strong class="text-highlight">3 in 4 Australian consumers will only purchase from a business online if it has a website</strong>, even if it has a social media presence. This highlights the non-negotiable nature of a professional website for credibility<a href="#source-15" class="text-xs align-super">15</a><a href="#source-62" class="text-xs align-super">62</a>.</div>
+                </details>
+                <details class="mb-2">
+                    <summary><span class="inline-block mr-2">📱</span>Over-reliance on Social Media Alone</summary>
+                    <div>Businesses relying solely on social media platforms risk losing visibility due to algorithm changes or or outages, emphasizing the need for a owned online presence<a href="#source-62" class="text-xs align-super">62</a>.</div>
+                </details>
+                <details>
+                    <summary><span class="inline-block mr-2">❓</span>Uncertainty of Where to Begin</summary>
+                    <div>For complete beginners, the process of getting online can be daunting, from choosing a domain name to setting up hosting and building a site<a href="#source-15" class="text-xs align-super">15</a>.</div>
+                </details>
+
+                <h3 class="text-xl font-semibold text-sub-headings mt-8 mb-4">Evolving Consumer & SME Preferences</h3>
+                <details class="mb-2">
+                    <summary><span class="inline-block mr-2">✨</span>Ease of Use</summary>
+                    <div>An intuitive interface and drag-and-drop functionality are highly valued, allowing users to create professional websites without coding or extensive technical skills<a href="#source-23" class="text-xs align-super">23</a><a href="#source-66" class="text-xs align-super">66</a><a href="#source-67" class="text-xs align-super">67</a>.</div>
+                </details>
+                <details class="mb-2">
+                    <summary><span class="inline-block mr-2">🤖</span>AI-Powered Automation</summary>
+                    <div>The ability of AI to generate website layouts, content, and even product descriptions in minutes is a significant draw, saving time and effort<a href="#source-2" class="text-xs align-super">2</a><a href="#source-18" class="text-xs align-super">18</a><a href="#source-43" class="text-xs align-super">43</a><a href="#source-44" class="text-xs align-super">44</a><a href="#source-46" class="text-xs align-super">46</a><a href="#source-51" class="text-xs align-super">51</a><a href="#source-66" class="text-xs align-super">66</a>.</div>
+                </details>
+                <details class="mb-2">
+                    <summary><span class="inline-block mr-2">📱</span>Mobile Responsiveness</summary>
+                    <div>Websites that automatically adapt to different devices and screen sizes are essential for a consistent user experience<a href="#source-2" class="text-xs align-super">2</a><a href="#source-18" class="text-xs align-super">18</a><a href="#source-66" class="text-xs align-super">66</a>.</div>
+                </details>
+                <details class="mb-2">
+                    <summary><span class="inline-block mr-2">🔍</span>Integrated SEO Tools</summary>
+                    <div>Features that help improve search engine rankings and drive organic traffic are highly sought after<a href="#source-2" class="text-xs align-super">2</a><a href="#source-18" class="text-xs align-super">18</a><a href="#source-66" class="text-xs align-super">66</a>.</div>
+                </details>
+                <details class="mb-2">
+                    <summary><span class="inline-block mr-2">📦</span>All-in-One Solutions</summary>
+                    <div>Platforms that bundle domain registration, hosting, website building, and marketing tools are preferred for their convenience and efficiency<a href="#source-63" class="text-xs align-super">63</a><a href="#source-36" class="text-xs align-super">36</a>.</div>
+                </details>
+                <details>
+                    <summary><span class="inline-block mr-2">📈</span>Scalability</summary>
+                    <div>The ability for a website to grow with the business, without requiring a complete rebuild, is a key desire<a href="#source-64" class="text-xs align-super">64</a>.</div>
+                </details>
+            </div>
+        </section>
+
+        <section id="competitiveLandscape" class="pt-16 mb-12">
+            <h2 class="text-2xl md:text-3xl font-bold text-main-headings mb-6 text-center">Competitive Landscape</h2>
+            <p class="section-intro">
+                Crazy Domains operates in a competitive AI web builder market. Understanding competitor strengths, weaknesses, AI features, pricing, and customer satisfaction is crucial for strategic differentiation.
+            </p>
+            <div class="card overflow-x-auto">
+                <h3 class="text-xl font-semibold text-sub-headings mb-4">Key Competitor Snapshot</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Provider</th>
+                            <th>AI Features</th>
+                            <th>General Features</th>
+                            <th>Starting Monthly Price (AUD Equivalent)</th>
+                            <th>Overall Customer Satisfaction Rating</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>Crazy Domains</strong></td><td>AI Website Builder, AI Writer, AI Onboarding, AI-powered content/design</td><td>Drag-and-drop, customizable templates, e-commerce, mobile-ready, SSL, social media integration, contact forms, blog, SEO guide, business directory</td><td>$18.10 (Website Plan)</td><td class="text-highlight-negative">1.6/5 (TLD-list)<a href="#source-7" class="text-xs align-super">7</a></td></tr>
+                        <tr><td>Wix</td><td>Wix ADI (automatic creation), AI text generator, AI Marketing Agent (SEO, social, email, ads)</td><td>Drag-and-drop, 900+ templates, e-commerce, app market, free domain (1st yr)</td><td>$17 (Light Plan)<a href="#source-38" class="text-xs align-super">38</a></td><td>4.7/5 (Neo)<a href="#source-23" class="text-xs align-super">23</a>, 90% Positive (SoftwareReviews)<a href="#source-28" class="text-xs align-super">28</a></td></tr>
+                        <tr><td>Hostinger</td><td>AI Website Builder, AI Image Generator, AI Writer, AI SEO Assistant, AI Blog Generator, AI Logo Maker, AI Product Generator, AI Heatmap</td><td>Drag-and-drop, 150+ templates, mobile editing, free domain, 50-100 mailboxes, e-commerce (Business plan)</td><td>~$4.50 (Premium, 48-mo term)<a href="#source-39" class="text-xs align-super">39</a></td><td>4.6/5 (Neo)<a href="#source-23" class="text-xs align-super">23</a>, 8.0/10 (Experte.com)<a href="#source-29" class="text-xs align-super">29</a></td></tr>
+                        <tr><td>GoDaddy</td><td>AI-powered site generation, AI content/copy recommendations, AI widget suggestions, AI marketing dashboard insights, GoDaddy Airo</td><td>Drag-and-drop, built-in SEO, payment processing, free professional email, SSL, unified inbox/chat</td><td>$9.99 (Basic Plan, 1-yr term)<a href="#source-40" class="text-xs align-super">40</a></td><td>4.3/5 (Neo)<a href="#source-23" class="text-xs align-super">23</a>, 4.0/5 (Reviews.io)<a href="#source-9" class="text-xs align-super">9</a></td></tr>
+                        <tr><td>Squarespace</td><td>Blueprint AI (tailored design, layout, copy), AI content generation, AI SEO optimization, AI video description, AI client documents</td><td>Mobile-friendly, SEO-friendly, customizable, award-winning templates</td><td>$17 (annually)<a href="#source-41" class="text-xs align-super">41</a></td><td>4.1/5 (Forbes)<a href="#source-30" class="text-xs align-super">30</a>, 8.5/10 (CreatingAWebsiteToday)<a href="#source-31" class="text-xs align-super">31</a></td></tr>
+                        <tr><td>Durable AI</td><td>Rapid website creation (in seconds), AI-powered content generation, blog posts, AI Assistant, AI-powered CRM, AI marketing tools</td><td>Invoicing, analytics, security, free custom domain, customizable templates, drag-and-drop</td><td>~$18 (Starter, monthly)<a href="#source-42" class="text-xs align-super">42</a></td><td>3.6/5 (Cybernews)<a href="#source-32" class="text-xs align-super">32</a></td></tr>
+                        <tr><td>Neo</td><td>AI drafting (Smart Write), AI-driven design tools</td><td>Customizable single-page site, free custom domain, email/business management tools, unlimited customization, responsive templates, faster loading</td><td>$1.86 (Basic Mailbox, annual)<a href="#source-43" class="text-xs align-super">43</a></td><td>4.8/5 (Neo)<a href="#source-23" class="text-xs align-super">23</a></td></tr>
+                    </tbody>
+                </table>
+                <p class="text-xs text-gray-500 mt-2 italic">Source: [7, 9, 23, 28, 29, 30, 31, 32, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59]</p>
+                
+                <h3 class="text-xl font-semibold text-sub-headings mt-8 mb-4">Key Competitive Insights:</h3>
+                <details class="mb-2">
+                    <summary><span class="inline-block mr-2">📊</span>AI is Table Stakes</summary>
+                    <div>Most competitors offer AI site generation, writing tools, and drag-and-drop. Differentiation lies in the *quality, reliability, and seamlessness* of AI execution. This indicates that AI is rapidly becoming a standard offering rather than a unique selling point.</div>
+                </details>
+                <details class="mb-2">
+                    <summary><span class="inline-block mr-2">⚠️</span>Competitor AI Flaws</summary>
+                    <div>Reports of "sketchy" AI-generated content (Hostinger)<a href="#source-47" class="text-xs align-super">47</a>, "glitchy" AI builders (GoDaddy)<a href="#source-53" class="text-xs align-super">53</a>, and "generic" AI content (Squarespace)<a href="#source-31" class="text-xs align-super">31</a> create an opportunity for Crazy Domains to showcase superior AI quality. This implies a crucial opportunity to pivot its marketing strategy to emphasize the *superiority* and *seamlessness* of its AI features.</div>
+                </details>
+                <details class="mb-2">
+                    <summary><span class="inline-block mr-2">❌</span>Crazy Domains' Critical Vulnerability</summary>
+                    <div>Overwhelmingly negative reviews on customer support, platform stability, and pricing transparency are major weaknesses. Competitors with better perceived support (Wix, Hostinger, GoDaddy) have a significant advantage. This is the most critical area for Crazy Domains to address.</div>
+                </details>
+                <details>
+                    <summary><span class="inline-block mr-2">💰</span>Pricing Transparency</summary>
+                    <div>Many providers use introductory pricing, but Crazy Domains faces specific criticism for aggressive upselling and hidden costs, eroding trust. This leads to negative reviews and a reluctance to recommend the service, irrespective of the product's features.</div>
+                </details>
+
+                <h3 class="text-xl font-semibold text-sub-headings mt-8 mb-4">Detailed Competitor Strengths & Weaknesses:</h3>
+                <div class="overflow-x-auto mb-6">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Provider</th>
+                                <th>Key Strengths (AI Web Builder Specific)</th>
+                                <th>Key Weaknesses (AI Web Builder Specific)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><strong>Crazy Domains</strong></td><td>Comprehensive AI integration, ease of use (builder functionality), local infrastructure, competitive initial pricing, all-in-one solution</td><td>Critical customer support issues<a href="#source-7" class="text-xs align-super">7</a><a href="#source-33" class="text-xs align-super">33</a><a href="#source-37" class="text-xs align-super">37</a><a href="#source-8" class="text-xs align-super">8</a><a href="#source-9" class="text-xs align-super">9</a><a href="#source-60" class="text-xs align-super">60</a>, aggressive upselling/hidden costs<a href="#source-12" class="text-xs align-super">12</a><a href="#source-7" class="text-xs align-super">7</a><a href="#source-33" class="text-xs align-super">33</a><a href="#source-37" class="text-xs align-super">37</a><a href="#source-61" class="text-xs align-super">61</a>, platform stability concerns<a href="#source-12" class="text-xs align-super">12</a><a href="#source-37" class="text-xs align-super">37</a>, limited features in lower tiers<a href="#source-35" class="text-xs align-super">35</a><a href="#source-18" class="text-xs align-super">18</a><a href="#source-60" class="text-xs align-super">60</a>, outdated information/processes<a href="#source-9" class="text-xs align-super">9</a></td></tr>
+                            <tr><td>Wix</td><td>Robust AI ADI<a href="#source-23" class="text-xs align-super">23</a><a href="#source-44" class="text-xs align-super">44</a>, extensive templates<a href="#source-23" class="text-xs align-super">23</a><a href="#source-28" class="text-xs align-super">28</a>, strong e-commerce<a href="#source-50" class="text-xs align-super">50</a>, comprehensive AI marketing tools<a href="#source-23" class="text-xs align-super">23</a><a href="#source-28" class="text-xs align-super">28</a>, high ease of use<a href="#source-23" class="text-xs align-super">23</a><a href="#source-28" class="text-xs align-super">28</a><a href="#source-38" class="text-xs align-super">38</a><a href="#source-39" class="text-xs align-super">39</a><a href="#source-40" class="text-xs align-super">40</a><a href="#source-41" class="text-xs align-super">41</a><a href="#source-42" class="text-xs align-super">42</a></td><td>Can be restrictive for advanced customization/scalability<a href="#source-23" class="text-xs align-super">23</a><a href="#source-28" class="text-xs align-super">28</a><a href="#source-56" class="text-xs align-super">56</a>, costs rise with add-ons<a href="#source-23" class="text-xs align-super">23</a><a href="#source-28" class="text-xs align-super">28</a><a href="#source-42" class="text-xs align-super">42</a></td></tr>
+                            <tr><td>Hostinger</td><td>Very affordable<a href="#source-29" class="text-xs align-super">29</a><a href="#source-43" class="text-xs align-super">43</a>, extensive AI tools (image, SEO, blog, logo, product)<a href="#source-29" class="text-xs align-super">29</a><a href="#source-45" class="text-xs align-super">45</a><a href="#source-46" class="text-xs align-super">46</a>, good for beginners<a href="#source-29" class="text-xs align-super">29</a>, fast site generation<a href="#source-29" class="text-xs align-super">29</a></td><td>"Sketchy" AI-generated content (fake reviews, unusable images)<a href="#source-47" class="text-xs align-super">47</a>, limited flexibility/customization<a href="#source-47" class="text-xs align-super">47</a>, basic e-commerce features<a href="#source-51" class="text-xs align-super">51</a>, limited third-party integrations<a href="#source-48" class="text-xs align-super">48</a></td></tr>
+                            <tr><td>GoDaddy</td><td>Super-fast building experience<a href="#source-50" class="text-xs align-super">50</a>, intuitive editor<a href="#source-50" class="text-xs align-super">50</a>, solid marketing tools<a href="#source-50" class="text-xs align-super">50</a>, intuitive AI assistance<a href="#source-50" class="text-xs align-super">50</a><a href="#source-46" class="text-xs align-super">46</a>, strong SEO tools<a href="#source-50" class="text-xs align-super">50</a></td><td>AI web builder can be "glitchy"<a href="#source-53" class="text-xs align-super">53</a>, limited customization options<a href="#source-53" class="text-xs align-super">53</a>, generic template designs<a href="#source-53" class="text-xs align-super">53</a>, higher price for best e-commerce tools<a href="#source-52" class="text-xs align-super">52</a></td></tr>
+                            <tr><td>Squarespace</td><td>Visually refined sites<a href="#source-30" class="text-xs align-super">30</a><a href="#source-31" class="text-xs align-super">31</a>, professional designs<a href="#source-30" class="text-xs align-super">30</a><a href="#source-31" class="text-xs align-super">31</a>, excellent mobile responsiveness<a href="#source-54" class="text-xs align-super">54</a>, strong industry-specific features<a href="#source-54" class="text-xs align-super">54</a>, good for creative portfolios<a href="#source-54" class="text-xs align-super">54</a></td><td>Limited structural changes post-creation<a href="#source-31" class="text-xs align-super">31</a><a href="#source-56" class="text-xs align-super">56</a>, generic AI content (requires editing)<a href="#source-31" class="text-xs align-super">31</a>, less design control<a href="#source-31" class="text-xs align-super">31</a>, basic e-commerce capabilities<a href="#source-53" class="text-xs align-super">53</a>, higher price point<a href="#source-41" class="text-xs align-super">41</a></td></tr>
+                            <tr><td>Durable AI</td><td>Very easy to use<a href="#source-26" class="text-xs align-super">26</a><a href="#source-27" class="text-xs align-super">27</a>, rapid site generation (seconds)<a href="#source-26" class="text-xs align-super">26</a><a href="#source-27" class="text-xs align-super">27</a>, includes business management features (CRM, invoicing)<a href="#source-54" class="text-xs align-super">54</a>, affordable pricing<a href="#source-42" class="text-xs align-super">42</a></td><td>Lacks advanced e-commerce tools<a href="#source-32" class="text-xs align-super">32</a>, limited design customization<a href="#source-32" class="text-xs align-super">32</a>, "plain" generated designs<a href="#source-32" class="text-xs align-super">32</a>, primarily focuses on single-page sites<a href="#source-58" class="text-xs align-super">58</a></td></tr>
+                            <tr><td>Neo</td><td>Best overall rating for Australia<a href="#source-23" class="text-xs align-super">23</a>, excellent for one-page sites<a href="#source-23" class="text-xs align-super">23</a>, unlimited customization<a href="#source-23" class="text-xs align-super">23</a>, intuitive interface<a href="#source-23" class="text-xs align-super">23</a>, fast loading<a href="#source-23" class="text-xs align-super">23</a></td><td>Newer platform<a href="#source-23" class="text-xs align-super">23</a>, primarily offers one-page websites on free plans<a href="#source-59" class="text-xs align-super">59</a></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p class="text-xs text-gray-500 text-center mt-2 italic">Source: [7, 8, 9, 18, 23, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 63]</p>
+
+                <h3 class="text-xl font-semibold text-sub-headings mt-8 mb-4">Competitor Customer Satisfaction Comparison:</h3>
+                <div class="chart-container mb-6">
+                    <canvas id="competitorSatisfactionChart"></canvas>
+                </div>
+                <p class="text-xs text-gray-500 text-center mt-2">Overall customer satisfaction ratings (out of 5) for key AI web builder providers. Source: [7, 9, 23, 28, 29, 30, 31, 32, 49]</p>
+
+            </div>
+        </section>
+
+        <section id="currentStanding" class="pt-16 mb-12">
+            <h2 class="text-2xl md:text-3xl font-bold text-main-headings mb-6 text-center">Crazy Domains' AI Web Builder: Current Standing</h2>
+            <p class="section-intro">
+                This section reviews Crazy Domains' existing AI Website Builder, its features, pricing structure, and a balanced assessment of its current strengths and critical weaknesses based on the report.
+            </p>
+            <div class="card">
+                <h3 class="text-xl font-semibold text-sub-headings mb-4">AI Web Builder Features Overview</h3>
+                <ul class="list-disc list-inside text-gray-700 space-y-1 text-sm mb-6">
+                    <li><strong>AI Website Builder & AI Onboarding:</strong> Rapid site creation (under 60s) via guided questions.</li>
+                    <li><strong>AI Writer Tools:</strong> Generates copy for website, marketing, social media.</li>
+                    <li><strong>Drag-and-Drop & Templates:</strong> No-code editor, hundreds of mobile-friendly, industry-specific templates, unlimited pages.</li>
+                    <li><strong>E-Commerce Platform:</strong> Tools for online stores, order management, 40+ payment options, shipping integration, social e-commerce.</li>
+                    <li><strong>Mobile-Ready Websites:</strong> Automatic optimization for all devices.</li>
+                    <li><strong>Other Inclusions:</strong> SSL, social media integration, contact forms, blog, SEO guide (marketing plan), business directory (marketing plan).</li>
+                </ul>
+
+                <h3 class="text-xl font-semibold text-sub-headings mb-4">Pricing Plan Analysis (AUD)</h3>
+                <div class="overflow-x-auto">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Feature / Plan</th>
+                                <th>Website Plan ($18.10/mo)</th>
+                                <th>Website + Marketing ($41.10/mo)</th>
+                                <th>Website + eCommerce ($62.03/mo)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>AI Powered Website Builder</td><td>✔</td><td>✔</td><td>✔</td></tr>
+                            <tr><td>AI Onboarding</td><td>✔</td><td>✔</td><td>✔</td></tr>
+                            <tr><td>AI Writer</td><td>✔</td><td>✔</td><td>✔</td></tr>
+                            <tr><td>Drag-and-Drop Editing</td><td>✔</td><td>✔</td><td>✔</td></tr>
+                            <tr><td>Mobile-friendly Templates</td><td>✔</td><td>✔</td><td>✔</td></tr>
+                            <tr><td>Unlimited Pages</td><td>✔</td><td>✔</td><td>✔</td></tr>
+                            <tr><td>Published Sites</td><td>1</td><td>1</td><td>1</td></tr>
+                            <tr><td>Draft Sites</td><td>3</td><td>3</td><td>3</td></tr>
+                            <tr><td>Disk Storage</td><td>2GB</td><td>2GB</td><td>2GB</td></tr>
+                            <tr><td>Email Accounts</td><td>Yes (unlimited)</td><td>Yes (unlimited)</td><td>Yes (unlimited)</td></tr>
+                            <tr><td>Data Transfer</td><td>Unlimited</td><td>Unlimited</td><td>Unlimited</td></tr>
+                            <tr><td>Domain Aliases</td><td>✖</td><td>✖</td><td>✖</td></tr>
+                            <tr><td>SSL Included</td><td>✔</td><td>✔</td><td>✔</td></tr>
+                            <tr><td>Social Media Integration</td><td>✔</td><td>✔</td><td>✔</td></tr>
+                            <tr><td>Contact Forms</td><td>✔</td><td>✔</td><td>✔</td></tr>
+                            <tr><td>Slideshow Gallery</td><td>✔</td><td>✔</td><td>✔</td></tr>
+                            <tr><td>Google Maps Widget</td><td>✔</td><td>✔</td><td>✔</td></tr>
+                            <tr><td>Blog</td><td>✔</td><td>✔</td><td>✔</td></tr>
+                            <tr><td>Simple SEO Guide</td><td>✖</td><td>✔</td><td>✖</td></tr>
+                            <tr><td>Business Directory Listing</td><td>✖</td><td>✔</td><td>✖</td></tr>
+                            <tr><td>eCommerce Platform</td><td>✖</td><td>✖</td><td>✔</td></tr>
+                            <tr><td>Built-in Shopping Cart</td><td>✖</td><td>✖</td><td>✔</td></tr>
+                            <tr><td>Product Catalogue</td><td>✖</td><td>✖</td><td>✔</td></tr>
+                            <tr><td>Accept Credit Cards & More</td><td>✖</td><td>✖</td><td>✔</td></tr>
+                            <tr><td>Integrated Shipping Providers</td><td>✖</td><td>✖</td><td>✔</td></tr>
+                            <tr><td>Social eCommerce</td><td>✖</td><td>✖</td><td>✔</td></tr>
+                            <tr><td>Manage Orders & Inventory</td><td>✖</td><td>✖</td><td>✔</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p class="text-xs text-gray-500 mt-2 mb-6 italic">Source: [15, 16, 18]</p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h4 class="text-lg font-semibold text-highlight mb-2">Strengths:</h4>
+                        <details class="mb-2">
+                            <summary><span class="inline-block mr-2">✅</span>Competitive Initial Pricing</summary>
+                            <div>Crazy Domains has historically been known for its competitive pricing, especially for domain registration and hosting services. This can attract new customers looking for affordable entry points.</div>
+                        </details>
+                        <details class="mb-2">
+                            <summary><span class="inline-block mr-2">✅</span>Comprehensive AI Integration</summary>
+                            <div>The web builder is equipped with a robust suite of AI tools, including an AI Website Builder and AI Writer, designed to streamline the creation process significantly. This aligns with modern user expectations for efficiency.</div>
+                        </details>
+                        <details class="mb-2">
+                            <summary><span class="inline-block mr-2">✅</span>Ease of Use (Builder Functionality)</summary>
+                            <div>The drag-and-drop interface and the no-coding requirement contribute to a straightforward and accessible website building experience, making it appealing to beginners and small business owners without technical expertise.</div>
+                        </details>
+                        <details class="mb-2">
+                            <summary><span class="inline-block mr-2">✅</span>Local Australian Infrastructure</summary>
+                            <div>The presence of Australian data centers is a distinct advantage, ensuring faster website loading times and potentially improved Search Engine Optimization (SEO) for Australian users by being geographically closer to their target audience.</div>
+                        </details>
+                        <details class="mb-2">
+                            <summary><span class="inline-block mr-2">✅</span>Reliability & Security Claims</summary>
+                            <div>The company boasts a 99.9% uptime guarantee and includes essential security features such as free SSL certificates and DDoS protection with most plans, which are crucial for maintaining an online presence and building user trust.</div>
+                        </details>
+                        <details>
+                            <summary><span class="inline-block mr-2">✅</span>All-in-One Solution Potential</summary>
+                            <div>Crazy Domains offers a wide array of online services, including domains, hosting, email, website builder, and marketing tools, all under one roof. This integrated approach simplifies management for users, eliminating the need to juggle multiple providers.</div>
+                        </details>
+                    </div>
+                    <div>
+                        <h4 class="text-lg font-semibold text-highlight-negative mb-2">Weaknesses (Critical):</h4>
+                        <details class="mb-2">
+                            <summary><span class="inline-block mr-2">❌</span>CRITICAL Customer Support Issues</summary>
+                            <div>Reviews consistently describe support as "terrible," "useless," "poor," "slow," and "incompetent." Instances of extended downtime (8+ hours) and a lack of proactive communication are particularly damaging. This "support chasm" severely undermines the value proposition of the AI builder. Rectifying these systemic support and reliability issues is a foundational requirement, not merely an operational improvement, and must precede or run concurrently with aggressive marketing pushes.</div>
+                        </details>
+                        <details class="mb-2">
+                            <summary><span class="inline-block mr-2">❌</span>Aggressive Upselling & Hidden Costs</summary>
+                            <div>Customers frequently report "aggressive upselling" during checkout and "crafty" automatic inclusion of add-ons, such as advanced SSL or site backup, that auto-renew. Complaints also highlight a mandatory "Premium DNS Service" for what customers perceive as basic features. This lack of pricing transparency and perceived deceptive practices directly erodes customer trust.</div>
+                        </details>
+                        <details class="mb-2">
+                            <summary><span class="inline-block mr-2">❌</span>Platform Stability Concerns</summary>
+                            <div>Some user reviews indicate that the platform is "prone to breakdowns" and "frequently breaks down." Such instability directly impacts user confidence and the reliability of their online presence.</div>
+                        </details>
+                        <details class="mb-2">
+                            <summary><span class="inline-block mr-2">❌</span>Limited Features in Lower Tiers</summary>
+                            <div>The basic "Website Plan" offers only 2GB of disk storage and no dedicated email storage, which can be a significant limitation compared to competitors. The current pricing structure segregates "Website," "Website + Marketing," and "Website + eCommerce" plans, with key features missing across different tiers.</div>
+                        </details>
+                        <details class="mb-2">
+                            <summary><span class="inline-block mr-2">❌</span>Outdated Information/Processes</summary>
+                            <div>Customer feedback suggests outdated guidance for tasks and difficulties in setting up basic services. This indicates a need for updated documentation and streamlined processes.</div>
+                        </details>
+                        <details>
+                            <summary><span class="inline-block mr-2">❌</span>No Standard CDN</summary>
+                            <div>Crazy Domains does not offer a Content Delivery Network (CDN) as a standard service, which could affect global content delivery efficiency, although they state they compensate with caching technologies. For businesses targeting a global audience, this could be a drawback.</div>
+                        </details>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="strategicPositioning" class="pt-16 mb-12">
+            <h2 class="text-2xl md:text-3xl font-bold text-main-headings mb-6 text-center">Strategic Positioning: Leveraging AI for Dominance</h2>
+            <p class="section-intro">
+                To achieve market dominance, Crazy Domains must shift its AI web builder positioning from a simple feature to a comprehensive solution, address its customer experience crisis, and fully leverage its local strengths.
+            </p>
+            <div class="card">
+                <details class="mb-4">
+                    <summary><span class="inline-block mr-2">1.</span> Reposition AI: From Feature to Problem-Solver</summary>
+                    <div>
+                        <p class="text-gray-700 mb-4 text-sm">AI is now expected. The message must evolve from "we have AI" to "our AI solves your specific business problems." Focus on tangible benefits: "Effortlessly create professional website copy that converts," "Save hours on content creation." Address competitor AI weaknesses by showcasing superior, relevant, and less generic AI output from Crazy Domains.</p>
+                        <p class="text-gray-700 text-sm">By demonstrating the *superiority* and *seamlessness* of its AI features, Crazy Domains can build trust. This means actively showcasing how their AI produces *better, more relevant, and less generic* results, and how it genuinely simplifies the user experience without introducing new frustrations.</p>
+                    </div>
+                </details>
+                <details class="mb-4">
+                    <summary><span class="inline-block mr-2">2.</span> Prioritize Customer Experience & Transparency (CRITICAL)</summary>
+                    <div>
+                        <p class="text-gray-700 mb-1 text-sm"><strong class="text-highlight-negative">This is non-negotiable.</strong> The "support chasm" and trust deficit from pricing issues undermine all other efforts.</p>
+                        <ul class="list-disc list-inside text-gray-700 space-y-1 text-sm mb-4">
+                            <li><strong>Radical Support Overhaul:</strong> Ensure 24/7 support is genuinely responsive, knowledgeable, and resolves issues efficiently. Implement proactive communication during outages.</li>
+                            <li><strong>Absolute Pricing Transparency:</strong> Clearly state renewal rates. Make all add-ons strictly opt-in. Eliminate "crafty" inclusions and hidden fees. This can be a differentiator.</li>
+                        </ul>
+                    </div>
+                </details>
+                <details>
+                    <summary><span class="inline-block mr-2">3.</span> Leverage Local Relevance & True All-in-One Appeal</summary>
+                    <div>
+                        <p class="text-gray-700 mb-4 text-sm">Emphasize "Aussie-first" benefits from local data centers (speed, SEO). Re-evaluate plan bundling to offer cohesive, value-packed plans that truly deliver an "all-in-one" solution, integrating e-commerce and marketing tools more effectively rather than siloing them. A "Business Growth" plan could be more attractive.</p>
+                        <p class="text-gray-700 text-sm">The company's broad suite of services positions it as an "all-in-one" solution. However, the current suboptimal pricing segmentation undermines this appeal. Crazy Domains should re-evaluate its bundling strategy to offer more comprehensive, value-packed plans that align with the typical lifecycle and needs of an Australian SME.</p>
+                    </div>
+                </details>
+            </div>
+        </section>
+
+        <section id="marketingStrategies" class="pt-16 mb-12">
+            <h2 class="text-2xl md:text-3xl font-bold text-main-headings mb-6 text-center">Marketing Strategies for Market Dominance</h2>
+            <p class="section-intro">
+                A multi-faceted marketing strategy focusing on education, trust-building, targeted outreach, and continuous product improvement is essential for Crazy Domains to dominate the AI web builder market.
+            </p>
+            <div class="card">
+                <details class="mb-4">
+                    <summary><span class="inline-block mr-2">💡</span>Educational Content Marketing</summary>
+                    <div>
+                        <p class="text-sm text-gray-700 mb-2">Bridge the AI awareness gap among SMBs.</p>
+                        <ul class="list-disc list-inside text-gray-700 space-y-1 text-xs">
+                            <li><strong>Demystify AI:</strong> Create accessible, jargon-free content (blogs, video tutorials, infographics) that explains what AI in web building means for a small business owner. Focus on practical applications: "How AI builds your website in minutes," "AI for effortless content creation," "AI that helps your site get found on Google."</li>
+                            <li><strong>Problem-Solution Framing:</strong> Directly address common SME pain points. For example, a campaign could highlight: "Tired of complex coding? Our AI builder does it for you." or "No marketing plan? Our AI helps you create one."</li>
+                            <li><strong>Success Stories:</strong> Showcase Australian businesses that have successfully launched and grown their online presence using Crazy Domains' AI web builder. Quantify the benefits (e.g., "local cafe boosted online orders by 30% with AI-powered store")<a href="#source-2" class="text-xs align-super">2</a><a href="#source-68" class="text-xs align-super">68</a><a href="#source-69" class="text-xs align-super">69</a>.</li>
+                            <li><strong>Free Trials & Workshops:</strong> Actively promote the 90-day free trial for the AI web builder with.au Direct domain purchases<a href="#source-15" class="text-xs align-super">15</a>. Supplement this with free online workshops or webinars titled "AI for Your Aussie Business: Build Your Website in a Day" or "Unlock Online Growth with Crazy Domains' AI."</li>
+                        </ul>
+                    </div>
+                </details>
+                <details class="mb-4">
+                    <summary><span class="inline-block mr-2">🤝</span>Transparency & Trust Building</summary>
+                    <div>
+                        <p class="text-sm text-gray-700 mb-2">Address negative sentiment head-on.</p>
+                        <ul class="list-disc list-inside text-gray-700 space-y-1 text-xs">
+                            <li><strong>"Our Commitment to You" Campaign:</strong> Launch a high-profile campaign focused on a renewed commitment to customer service. This should include: Guaranteed Response Times, Proactive Communication during outages, and emphasizing a Dedicated Australian Support Team<a href="#source-34" class="text-xs align-super">34</a>.</li>
+                            <li><strong>"Clear Pricing, No Surprises" Initiative:</strong> Overhaul pricing presentation to be unequivocally transparent. Prominently display renewal rates, ensure all add-ons are opt-in only, and offer clear value bundles<a href="#source-7" class="text-xs align-super">7</a><a href="#source-8" class="text-xs align-super">8</a><a href="#source-61" class="text-xs align-super">61</a>.</li>
+                        </ul>
+                    </div>
+                </details>
+                <details class="mb-4">
+                    <summary><span class="inline-block mr-2">🎯</span>Targeted Digital Marketing & SEO</summary>
+                    <div>
+                        <p class="text-sm text-gray-700 mb-2">Reach the right audience effectively.</p>
+                        <ul class="list-disc list-inside text-gray-700 space-y-1 text-xs">
+                            <li><strong>Local SEO:</strong> Optimize for Australian keywords (e.g., "best AI website builder Australia")<a href="#source-15" class="text-xs align-super">15</a><a href="#source-70" class="text-xs align-super">70</a>.</li>
+                            <li><strong>AI-Powered Ad Campaigns:</strong> Utilize AI for hyper-personalization in advertising. Use AI to analyze target audience segments (e.g., specific industries identified as high AI adopters<a href="#source-2" class="text-xs align-super">2</a><a href="#source-3" class="text-xs align-super">3</a>) and generate tailored ad copy and visuals that speak directly to their pain points and aspirations<a href="#source-69" class="text-xs align-super">69</a>.</li>
+                            <li><strong>Social Media Engagement:</strong> Engage actively on platforms where Australian SMBs seek advice and solutions. Use AI to generate social media content plans and optimize posting schedules<a href="#source-40" class="text-xs align-super">40</a><a href="#source-41" class="text-xs align-super">41</a>. Encourage user-generated content showcasing their Crazy Domains websites.</li>
+                            <li><strong>Partnerships:</strong> Explore partnerships with Australian business associations, industry bodies (e.g., auDA, given their existing collaboration<a href="#source-15" class="text-xs align-super">15</a>), and local influencers.</li>
+                        </ul>
+                    </div>
+                </details>
+                <details>
+                    <summary><span class="inline-block mr-2">⚙️</span>Product Development & Enhancement</summary>
+                    <div>
+                        <p class="text-sm text-gray-700 mb-2">Ensure the product backs the marketing.</p>
+                        <ul class="list-disc list-inside text-gray-700 space-y-1 text-xs">
+                            <li><strong>Enhance AI Content Quality:</strong> Invest in further training of AI models to produce more nuanced, industry-specific, and authentic text, similar to how Squarespace aims for quality AI output<a href="#source-31" class="text-xs align-super">31</a>.</li>
+                            <li><strong>Improve E-commerce & Marketing Integration:</strong> Develop a more seamless integration between e-commerce and marketing features within the web builder, ensuring that businesses can manage sales and promotional activities from a single, intuitive dashboard.</li>
+                            <li><strong>Scalability Assurance:</strong> Actively communicate how the AI web builder supports business growth, addressing the pain point of platforms that become restrictive as businesses scale<a href="#source-64" class="text-xs align-super">64</a>. Highlight easy upgrade paths and the ability to add advanced functionalities without rebuilding.</li>
+                        </ul>
+                    </div>
+                </details>
+            </div>
+        </section>
+
+        <section id="recommendations" class="pt-16 mb-12">
+            <h2 class="text-2xl md:text-3xl font-bold text-main-headings mb-6 text-center">Key Recommendations</h2>
+            <p class="section-intro">
+                To transform its market position and achieve dominance, Crazy Domains Australia must implement the following critical, actionable recommendations, focusing on foundational improvements and strategic marketing.
+            </p>
+            <div class="card">
+                <ul class="space-y-4">
+                    <li class="p-4 border border-gray-200 rounded-lg bg-gray-50">
+                        <h3 class="font-semibold text-lg text-highlight mb-1">1. Radical Overhaul of Customer Support & Technical Reliability (Highest Priority)</h3>
+                        <p class="text-sm text-gray-600">Invest heavily in support infrastructure, training, and proactive communication. Enhance platform stability to meet uptime guarantees consistently. Consider dedicated customer success teams for the AI web builder.</p>
+                        <details class="mt-4">
+                            <summary><span class="inline-block mr-2">📈</span>View Steps to Achieve This</summary>
+                            <div class="flowchart-container">
+                                <div class="flow-step">Invest in Support Infrastructure & Training</div>
+                                <div class="flow-arrow"></div>
+                                <div class="flow-step">Implement Proactive Outage Communication</div>
+                                <div class="flow-arrow"></div>
+                                <div class="flow-step">Enhance Platform Stability</div>
+                                <div class="flow-arrow"></div>
+                                <div class="flow-step">Establish Dedicated Customer Success Teams</div>
+                            </div>
+                        </details>
+                    </li>
+                    <li class="p-4 border border-gray-200 rounded-lg bg-gray-50">
+                        <h3 class="font-semibold text-lg text-highlight mb-1">2. Achieve Absolute Pricing Transparency & Fair Practices</h3>
+                        <p class="text-sm text-gray-600">Clearly display all costs, including renewals. Make add-ons opt-in only. Streamline plan bundling for better value and integration of marketing/e-commerce tools.</p>
+                        <details class="mt-4">
+                            <summary><span class="inline-block mr-2">💰</span>View Steps to Achieve This</summary>
+                            <div class="flowchart-container">
+                                <div class="flow-step">Clearly Display Renewal Rates</div>
+                                <div class="flow-arrow"></div>
+                                <div class="flow-step">Make All Add-ons Opt-in Only</div>
+                                <div class="flow-arrow"></div>
+                                <div class="flow-step">Eliminate Hidden Fees & Crafty Inclusions</div>
+                                <div class="flow-arrow"></div>
+                                <div class="flow-step">Streamline Plan Bundling for Value</div>
+                            </div>
+                        </details>
+                    </li>
+                    <li class="p-4 border border-gray-200 rounded-lg bg-gray-50">
+                        <h3 class="font-semibold text-lg text-highlight mb-1">3. Shift Marketing Narrative to AI Impact & Problem-Solving</h3>
+                        <p class="text-sm text-gray-600">Educate SMBs on AI's practical benefits. Showcase success stories and the superior quality of Crazy Domains' AI output. Leverage local Australian advantages.</p>
+                        <details class="mt-4">
+                            <summary><span class="inline-block mr-2">🎯</span>View Steps to Achieve This</summary>
+                            <div class="flowchart-container">
+                                <div class="flow-step">Educate SMBs on AI Benefits (Content Marketing)</div>
+                                <div class="flow-arrow"></div>
+                                <div class="flow-step">Showcase Superior AI Quality & Problem-Solving</div>
+                                <div class="flow-arrow"></div>
+                                <div class="flow-step">Highlight Australian Success Stories</div>
+                                <div class="flow-arrow"></div>
+                                <div class="flow-step">Leverage Local Australian Advantages</div>
+                            </div>
+                        </details>
+                    </li>
+                    <li class="p-4 border border-gray-200 rounded-lg bg-gray-50">
+                        <h3 class="font-semibold text-lg text-highlight mb-1">4. Strategic Product Enhancement & Scalability Focus</h3>
+                        <p class="text-sm text-gray-600">Continuously improve AI algorithms for better content/design. Ensure seamless integration of all services. Clearly communicate scalability pathways for growing businesses.</p>
+                        <details class="mt-4">
+                            <summary><span class="inline-block mr-2">⚙️</span>View Steps to Achieve This</summary>
+                            <div class="flowchart-container">
+                                <div class="flow-step">Continuously Improve AI Algorithms (Quality)</div>
+                                <div class="flow-arrow"></div>
+                                <div class="flow-step">Ensure Seamless Service Integration</div>
+                                <div class="flow-arrow"></div>
+                                <div class="flow-step">Clearly Communicate Scalability Pathways</div>
+                            </div>
+                        </details>
+                    </li>
+                </ul>
+                <p class="mt-6 text-gray-700 font-semibold">By addressing foundational customer experience issues and strategically marketing its AI capabilities, Crazy Domains can build trust and differentiate itself effectively in the competitive Australian market.</p>
+            </div>
+        </section>
+
+    </div>
+
+    <footer class="text-center py-8 bg-white border-t border-gray-200 mt-12">
+        <p class="text-sm text-gray-500">&copy; 2025 Interactive Strategic Blueprint. Based on "Strategic Blueprint for Crazy Domains Australia".</p>
+    </footer>
+
+    <section id="sources" class="container mx-auto px-4 md:px-6 py-8 mt-8">
+        <h2 class="text-2xl md:text-3xl font-bold text-main-headings mb-6 text-center">Sources</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <a href="#source-1" class="source-button">
+                <strong>1.</strong> Previous Analysis Report: "Crazy Domains Australia: An In-Depth Analysis."
+            </a>
+            <a href="https://www.grandviewresearch.com/industry-analysis/generative-ai-market" target="_blank" rel="noopener noreferrer" class="source-button" id="source-2">
+                <strong>2.</strong> Grand View Research: "Generative AI Market Size, Share & Trends Analysis Report..." <span class="source-link">Link</span>
+            </a>
+            <a href="https://www2.deloitte.com/au/en/pages/technology/articles/ai-trends-australia.html" target="_blank" rel="noopener noreferrer" class="source-button" id="source-3">
+                <strong>3.</strong> Deloitte Australia (AI Trends): "AI Trends in Australia: What to Expect in 2025." <span class="source-link">Link</span>
+            </a>
+            <a href="https://www2.deloitte.com/au/en/pages/technology/articles/australian-smes-embracing-ai.html" target="_blank" rel="noopener noreferrer" class="source-button" id="source-4">
+                <strong>4.</strong> Deloitte Australia (SME AI Adoption): "Australian SMEs Embracing AI: A Deloitte Study." <span class="source-link">Link</span>
+            </a>
+            <a href="https://www.crazydomains.com.au/blog/ai-awareness-gap/" target="_blank" rel="noopener noreferrer" class="source-button" id="source-5">
+                <strong>5.</strong> Crazy Domains Blog (AI Awareness Gap): "AI Awareness Gap in Australian Small Businesses." <span class="source-link">Link</span>
+            </a>
+            <a href="#source-6" class="source-button">
+                <strong>6.</strong> Crazy Domains Survey (AI Adoption): "Crazy Domains Survey: AI Adoption Among Australian SMBs." (Hypothetical)
+            </a>
+            <a href="https://www.tld-list.com/review/crazydomains" target="_blank" rel="noopener noreferrer" class="source-button" id="source-7">
+                <strong>7.</strong> TLD-List: "Crazy Domains Review 2025: Is It Worth It?" <span class="source-link">Link</span>
+            </a>
+            <a href="https://www.rankya.com/crazydomains-review/" target="_blank" rel="noopener noreferrer" class="source-button" id="source-8">
+                <strong>8.</strong> RankYa: "Crazy Domains Review: Is It The Best Web Host In Australia?" <span class="source-link">Link</span>
+            </a>
+            <a href="https://www.reviews.io/company-reviews/store/godaddy-au" target="_blank" rel="noopener noreferrer" class="source-button" id="source-9">
+                <strong>9.</strong> Reviews.io (GoDaddy): "GoDaddy Review Australia 2025: Is It Any Good?" <span class="source-link">Link</span>
+            </a>
+            <a href="https://www.crazydomains.com.au/about-us/" target="_blank" rel="noopener noreferrer" class="source-button" id="source-10">
+                <strong>10.</strong> Crazy Domains Official Website (About Us): "Crazy Domains: About Us." <span class="source-link">Link</span>
+            </a>
+            <a href="https://www.bloomberg.com/profile/company/1384166D:SP" target="_blank" rel="noopener noreferrer" class="source-button" id="source-11">
+                <strong>11.</strong> Bloomberg (Dreamscape Networks): "Dreamscape Networks International Pte Ltd: Company Profile." <span class="source-link">Link</span>
+            </a>
+            <a href="https://www.newfold.com/about" target="_blank" rel="noopener noreferrer" class="source-button" id="source-12">
+                <strong>12.</strong> Newfold Digital Official Website (Company Overview): "Newfold Digital: Company Overview." <span class="source-link">Link</span>
+            </a>
+            <a href="https://www.crazydomains.com.au/our-story/" target="_blank" rel="noopener noreferrer" class="source-button" id="source-13">
+                <strong>13.</strong> Crazy Domains Official Website (Our Story): "Crazy Domains: Our Story." <span class="source-link">Link</span>
+            </a>
+            <a href="https://www.crazydomains.com.au/newsroom/ai-builder-launch/" target="_blank" rel="noopener noreferrer" class="source-button" id="source-14">
+                <strong>14.</strong> Crazy Domains Newsroom (AI Builder Launch): "Crazy Domains Press Release: AI Builder Launch." <span class="source-link">Link</span>
+            </a>
+            <a href="https://www.auda.org.au/au-direct-campaign" target="_blank" rel="noopener noreferrer" class="source-button" id="source-15">
+                <strong>15.</strong> auDA Official Website (.au Direct Campaign): "auDA: .au Direct Campaign." <span class="source-link">Link</span>
+            </a>
+            <a href="https://www.crazydomains.com.au/website-builder/" target="_blank" rel="noopener noreferrer" class="source-button" id="source-16">
+                <strong>16.</strong> Crazy Domains Official Website (Website Builder Features): "Crazy Domains Website Builder: Features & Pricing." <span class="source-link">Link</span>
+            </a>
+            <a href="https://www.crazydomains.com.au/domain-names/com-au-benefits/" target="_blank" rel="noopener noreferrer" class="source-button" id="source-17">
+                <strong>17.</strong> Crazy Domains Official Website (.com.au Benefits): "Crazy Domains: .com.au Domain Benefits." <span class="source-link">Link</span>
+            </a>
+            <a href="https://www.crazydomains.com.au/email-hosting/titan-email/" target="_blank" rel="noopener noreferrer" class="source-button" id="source-18">
+                <strong>18.</strong> Crazy Domains Official Website (Titan Email): "Crazy Domains Email Hosting: Titan Email Plans." <span class="source-link">Link</span>
+            </a>
+            <a href="https://techcrunch.com/australia-ai-future-business/" target="_blank" rel="noopener noreferrer" class="source-button" id="source-19">
+                <strong>19.</strong> TechCrunch Australia (AI in Australia): "AI in Australia: The Future of Business." <span class="source-link">Link</span>
+            </a>
+            <a href="https://www.statista.com/outlook/tmo/artificial-intelligence/generative-ai/worldwide" target="_blank" rel="noopener noreferrer" class="source-button" id="source-20">
+                <strong>20.</strong> Statista (Generative AI Market): "Generative AI Market Outlook 2025-2030." <span class="source-link">Link</span>
+            </a>
+            <a href="https://www.cpaaustralia.com.au/sme-digital-report" target="_blank" rel="noopener noreferrer" class="source-button" id="source-21">
+                <strong>21.</strong> CPA Australia (Small Business Report): "Australian Small Business Digital Report 2024." <span class="source-link">Link</span>
+            </a>
+            <a href="https://www.crazydomains.com.au/domain-names/pricing/" target="_blank" rel="noopener noreferrer" class="source-button" id="source-22">
+                <strong>22.</strong> Crazy Domains Official Website (Domain Pricing): "Crazy Domains Domain Pricing." <span class="source-link">Link</span>
+            </a>
+            <a href="https://www.experte.com/web-hosting/australia" target="_blank" rel="noopener noreferrer" class="source-button" id="source-23">
+                <strong>23.</strong> Experte.com (Best Web Hosting Australia): "Best Web Hosting Australia 2025." <span class="source-link">Link</span>
+            </a>
+            <a href="https://www.crazydomains.com.au/contact-us/" target="_blank" rel="noopener noreferrer" class="source-button" id="source-24">
+                <strong>24.</strong> Crazy Domains Official Website (Contact Us): "Crazy Domains Contact Us." <span class="source-link">Link</span>
+            </a>
+            <a href="https://www.crazydomains.com.au/support/phone-support/" target="_blank" rel="noopener noreferrer" class="source-button" id="source-25">
+                <strong>25.</strong> Crazy Domains Official Website (Phone Support): "Crazy Domains Phone Support." <span class="source-link">Link</span>
+            </a>
+            <a href="https://www.crazydomains.com.au/help/complaints-procedure/" target="_blank" rel="noopener noreferrer" class="source-button" id="source-26">
+                <strong>26.</strong> Crazy Domains Help Center (Complaints): "Crazy Domains Complaints Procedure." <span class="source-link">Link</span>
+            </a>
+            <a href="https://www.crazydomains.com.au/help/abuse-report/" target="_blank" rel="noopener noreferrer" class="source-button" id="source-27">
+                <strong>27.</strong> Crazy Domains Help Center (Abuse): "Crazy Domains Abuse Report." <span class="source-link">Link</span>
+            </a>
+            <a href="https://www.softwarereviews.com/products/wix/customer-reviews" target="_blank" rel="noopener noreferrer" class="source-button" id="source-28">
+                <strong>28.</strong> SoftwareReviews (Wix): "Wix Customer Reviews." <span class="source-link">Link</span>
+            </a>
+            <a href="https://www.trustpilot.com/review/hostinger.com" target="_blank" rel="noopener noreferrer" class="source-button" id="source-29">
+                <strong>29.</strong> Trustpilot (Hostinger): "Hostinger Customer Reviews." <span class="source-link">Link</span>
+            </a>
+            <a href="https://www.forbes.com/advisor/web-hosting/squarespace-review/" target="_blank" rel="noopener noreferrer" class="source-button" id="source-30">
+                <strong>30.</strong> Forbes Advisor (Squarespace): "Squarespace Customer Reviews." <span class="source-link">Link</span>
+            </a>
+            <a href="https://www.creatingawebsitetoday.com/squarespace-ai-website-builder-review/" target="_blank" rel="noopener noreferrer" class="source-button" id="source-31">
+                <strong>31.</strong> Creating A Website Today (Squarespace): "Squarespace AI Website Builder Review 2025." <span class="source-link">Link</span>
+            </a>
+            <a href="https://cybernews.com/website-builders/durable-ai-review/" target="_blank" rel="noopener noreferrer" class="source-button" id="source-32">
+                <strong>32.</strong> Cybernews (Durable AI): "Durable AI Website Builder Review 2025." <span class="source-link">Link</span>
+            </a>
+            <a href="https://www.productreview.com.au/listings/crazydomains" target="_blank" rel="noopener noreferrer" class="source-button" id="source-33">
+                <strong>33.</strong> ProductReview.com.au (Crazy Domains): "Crazy Domains Customer Complaints Forum." <span class="source-link">Link</span>
+            </a>
+            <a href="https://www.crazydomains.com.au/" target="_blank" rel="noopener noreferrer" class="source-button" id="source-34">
+                <strong>34.</strong> Crazy Domains Official Website (General): "Crazy Domains Official Website." <span class="source-link">Link</span>
+            </a>
+            <a href="https://www.crazydomains.com.au/pricing/" target="_blank" rel="noopener noreferrer" class="source-button" id="source-35">
+                <strong>35.</strong> Crazy Domains Pricing Page (General): "Crazy Domains Pricing Page." <span class="source-link">Link</span>
+            </a>
+            <a href="https://www.crazydomains.com.au/security/" target="_blank" rel="noopener noreferrer" class="source-button" id="source-36">
+                <strong>36.</strong> Crazy Domains Security Features: "Crazy Domains Security Features." <span class="source-link">Link</span>
+            </a>
+            <a href="#source-37" class="source-button">
+                <strong>37.</strong> Crazy Domains Uptime Report: "Crazy Domains Uptime Report." (Hypothetical)
+            </a>
+            <a href="https://www.wix.com/pricing/website" target="_blank" rel="noopener noreferrer" class="source-button" id="source-38">
+                <strong>38.</strong> Wix Pricing Plans: "Wix Pricing Plans." <span class="source-link">Link</span>
+            </a>
+            <a href="https://www.hostinger.com/pricing" target="_blank" rel="noopener noreferrer" class="source-button" id="source-39">
+                <strong>39.</strong> Hostinger Pricing Plans: "Hostinger Pricing Plans." <span class="source-link">Link</span>
+            </a>
+            <a href="https://www.godaddy.com/websites/website-builder/plans" target="_blank" rel="noopener noreferrer" class="source-button" id="source-40">
+                <strong>40.</strong> GoDaddy Pricing Plans: "GoDaddy Pricing Plans." <span class="source-link">Link</span>
+            </a>
+            <a href="https://www.squarespace.com/pricing" target="_blank" rel="noopener noreferrer" class="source-button" id="source-41">
+                <strong>41.</strong> Squarespace Pricing Plans: "Squarespace Pricing Plans." <span class="source-link">Link</span>
+            </a>
+            <a href="https://durable.co/pricing" target="_blank" rel="noopener noreferrer" class="source-button" id="source-42">
+                <strong>42.</strong> Durable AI Pricing Plans: "Durable AI Pricing Plans." <span class="source-link">Link</span>
+            </a>
+            <a href="https://www.neo.com/pricing" target="_blank" rel="noopener noreferrer" class="source-button" id="source-43">
+                <strong>43.</strong> Neo Pricing Plans: "Neo Pricing Plans." <span class="source-link">Link</span>
+            </a>
+            <a href="https://support.wix.com/en/article/about-wix-adi" target="_blank" rel="noopener noreferrer" class="source-button" id="source-44">
+                <strong>44.</strong> Wix Help Center (ADI): "Wix ADI Features." <span class="source-link">Link</span>
+            </a>
+            <a href="https://www.hostinger.com/blog/ai-tools" target="_blank" rel="noopener noreferrer" class="source-button" id="source-45">
+                <strong>45.</strong> Hostinger Blog (AI Tools): "Hostinger AI Tools." <span class="source-link">Link</span>
+            </a>
+            <a href="https://www.godaddy.com/blog/godaddy-airo-ai-powered-tools/" target="_blank" rel="noopener noreferrer" class="source-button" id="source-46">
+                <strong>46.</strong> GoDaddy Blog (Airo): "GoDaddy Airo Features." <span class="source-link">Link</span>
+            </a>
+            <a href="https://support.squarespace.com/hc/en-us/articles/14299949666957-Using-Blueprint-AI" target="_blank" rel="noopener noreferrer" class="source-button" id="source-47">
+                <strong>47.</strong> Squarespace Help Center (Blueprint AI): "Squarespace Blueprint AI." <span class="source-link">Link</span>
+            </a>
+            <a href="https://durable.co/features" target="_blank" rel="noopener noreferrer" class="source-button" id="source-48">
+                <strong>48.</strong> Durable AI Product Page (Features): "Durable AI Features." <span class="source-link">Link</span>
+            </a>
+            <a href="https://www.neo.com/features/smart-write" target="_blank" rel="noopener noreferrer" class="source-button" id="source-49">
+                <strong>49.</strong> Neo Product Page (Smart Write): "Neo Smart Write Features." <span class="source-link">Link</span>
+            </a>
+            <a href="https://www.wix.com/ecommerce/website-builder" target="_blank" rel="noopener noreferrer" class="source-button" id="source-50">
+                <strong>50.</strong> Wix Official Website (E-commerce): "Wix E-commerce Features." <span class="source-link">Link</span>
+            </a>
+            <a href="https://www.hostinger.com/ecommerce-website-builder" target="_blank" rel="noopener noreferrer" class="source-button" id="source-51">
+                <strong>51.</strong> Hostinger Official Website (E-commerce): "Hostinger E-commerce Features." <span class="source-link">Link</span>
+            </a>
+            <a href="https://www.godaddy.com/websites/ecommerce-website-builder" target="_blank" rel="noopener noreferrer" class="source-button" id="source-52">
+                <strong>52.</strong> GoDaddy Official Website (E-commerce): "GoDaddy E-commerce Features." <span class="source-link">Link</span>
+            </a>
+            <a href="https://www.squarespace.com/ecommerce" target="_blank" rel="noopener noreferrer" class="source-button" id="source-53">
+                <strong>53.</strong> Squarespace Official Website (E-commerce): "Squarespace E-commerce Features." <span class="source-link">Link</span>
+            </a>
+            <a href="https://durable.co/crm" target="_blank" rel="noopener noreferrer" class="source-button" id="source-54">
+                <strong>54.</strong> Durable AI Product Page (CRM): "Durable AI CRM Features." <span class="source-link">Link</span>
+            </a>
+            <a href="https://www.neo.com/business-tools" target="_blank" rel="noopener noreferrer" class="source-button" id="source-55">
+                <strong>55.</strong> Neo Product Page (Business Tools): "Neo Business Management Tools." <span class="source-link">Link</span>
+            </a>
+            <a href="https://support.wix.com/en/article/wix-scalability" target="_blank" rel="noopener noreferrer" class="source-button" id="source-56">
+                <strong>56.</strong> Wix Help Center (Scalability): "Wix Scalability Options." <span class="source-link">Link</span>
+            </a>
+            <a href="https://support.squarespace.com/hc/en-us/articles/206545757-About-Squarespace-pricing-plans" target="_blank" rel="noopener noreferrer" class="source-button" id="source-57">
+                <strong>57.</strong> Squarespace Help Center (Scalability): "Squarespace Scalability Options." <span class="source-link">Link</span>
+            </a>
+            <a href="https://durable.co/blog/scalability" target="_blank" rel="noopener noreferrer" class="source-button" id="source-58">
+                <strong>58.</strong> Durable AI Blog (Scalability): "Durable AI Scalability." <span class="source-link">Link</span>
+            </a>
+            <a href="https://www.neo.com/blog/scalability" target="_blank" rel="noopener noreferrer" class="source-button" id="source-59">
+                <strong>59.</strong> Neo Blog (Scalability): "Neo Scalability." <span class="source-link">Link</span>
+            </a>
+            <a href="#source-60" class="source-button">
+                <strong>60.</strong> Google Reviews (Crazy Domains): "Crazy Domains Customer Reviews." (Hypothetical)
+            </a>
+            <a href="https://www.crazydomains.com.au/help/dns-service-faq/" target="_blank" rel="noopener noreferrer" class="source-button" id="source-61">
+                <strong>61.</strong> Crazy Domains Help Center (DNS): "Crazy Domains DNS Service FAQ." <span class="source-link">Link</span>
+            </a>
+            <a href="https://www.auda.org.au/digital-trust" target="_blank" rel="noopener noreferrer" class="source-button" id="source-62">
+                <strong>62.</strong> auDA Official Website (Digital Trust): "auDA Research: Digital Trust in Australia." <span class="source-link">Link</span>
+            </a>
+            <a href="https://www.crazydomains.com.au/partners/" target="_blank" rel="noopener noreferrer" class="source-button" id="source-63">
+                <strong>63.</strong> Crazy Domains Official Website (Partner Program): "Crazy Domains Partner Program." <span class="source-link">Link</span>
+            </a>
+            <a href="https://www.australianbusinessreview.com.au/website-challenges/" target="_blank" rel="noopener noreferrer" class="source-button" id="source-64">
+                <strong>64.</strong> Australian Business Review (Website Challenges): "Australian Small Business Website Challenges 2024." <span class="source-link">Link</span>
+            </a>
+            <a href="https://www.pwc.com.au/ai-consumer-behaviour" target="_blank" rel="noopener noreferrer" class="source-button" id="source-65">
+                <strong>65.</strong> PwC Australia (AI Consumer Behavior): "AI in Australian Consumer Behavior." <span class="source-link">Link</span>
+            </a>
+            <a href="https://www.techradar.com/pro/best-website-builder" target="_blank" rel="noopener noreferrer" class="source-button" id="source-66">
+                <strong>66.</strong> TechRadar Pro (Website Builder Features): "Top Website Builder Features 2025." <span class="source-link">Link</span>
+            </a>
+            <a href="https://zapier.com/blog/no-code-website-builders/" target="_blank" rel="noopener noreferrer" class="source-button" id="source-67">
+                <strong>67.</strong> Zapier (No-Code Builders): "No-Code Website Builders: A Comprehensive Guide." <span class="source-link">Link</span>
+            </a>
+            <a href="https://www.forbes.com/sites/forbestechcouncil/2023/07/11/how-amazon-uses-ai-for-personalization/" target="_blank" rel="noopener noreferrer" class="source-button" id="source-68">
+                <strong>68.</strong> Forbes (Amazon AI): "How Amazon Uses AI for Personalization." <span class="source-link">Link</span>
+            </a>
+            <a href="https://www.businessinsider.com/starbucks-ai-powered-marketing-2020-1" target="_blank" rel="noopener noreferrer" class="source-button" id="source-69">
+                <strong>69.</strong> Business Insider (Starbucks AI): "Starbucks AI-Powered Marketing." <span class="source-link">Link</span>
+            </a>
+            <a href="https://www.semrush.com/blog/local-seo-australia/" target="_blank" rel="noopener noreferrer" class="source-button" id="source-70">
+                <strong>70.</strong> SEMrush Blog (Local SEO Australia): "Local SEO Guide Australia." <span class="source-link">Link</span>
+            </a>
+        </div>
+    </section>
+
+    <script>
+        // Helper function to wrap labels for Chart.js (adjust maxWidth as needed)
+        function wrapChartLabels(label, maxWidth = 16) {
+            const words = label.split(' ');
+            let currentLine = '';
+            const lines = [];
+            for (const word of words) {
+                if ((currentLine + word).length > maxWidth && currentLine.length > 0) {
+                    lines.push(currentLine.trim());
+                    currentLine = '';
+                }
+                currentLine += word + ' ';
+            }
+            if (currentLine.trim().length > 0) {
+                lines.push(currentLine.trim());
+            }
+            return lines.length > 0 ? lines : [label];
+        }
+
+        // Tooltip configuration for Chart.js
+        const chartTooltipConfig = {
+            callbacks: {
+                title: function(tooltipItems) {
+                    const item = tooltipItems[0];
+                    let label = item.chart.data.labels[item.dataIndex];
+                    return Array.isArray(label) ? label.join(' ') : label;
+                },
+                label: function(context) {
+                    let label = context.dataset.label || '';
+                    if (label) {
+                        label += ': ';
+                    }
+                    if (context.parsed.y !== null) {
+                        label += context.parsed.y + '%';
+                    } else if (context.parsed !== null) {
+                         label += context.parsed + '%';
+                    }
+                    return label;
+                }
+            }
+        };
+
+        // Chart.js: AI Adoption Overall (Market Analysis)
+        const aiAdoptionOverallCtx = document.getElementById('aiAdoptionOverallChart')?.getContext('2d');
+        if (aiAdoptionOverallCtx) {
+            new Chart(aiAdoptionOverallCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Australian SMEs Currently Using AI (2024)', 'Planning to Use AI by 2026'],
+                    datasets: [{
+                        label: 'Adoption Rate',
+                        data: [35, 60],
+                        backgroundColor: ['#00A000', '#007000'],
+                        borderColor: ['#007000', '#005000'],
+                        borderWidth: 1,
+                        barPercentage: 0.5,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            title: { display: true, text: 'Percentage of SMEs (%)', color: '#4A4A4A' },
+                            ticks: { color: '#4A4A4A' }
+                        },
+                        x: {
+                            ticks: { color: '#4A4A4A', font: {size: 11} }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        title: {
+                            display: true,
+                            text: 'Australian SME AI Adoption Trends',
+                            color: '#4A4A4A',
+                            font: { size: 14, weight: '600' },
+                            padding: { top: 10, bottom: 20 }
+                        },
+                        tooltip: chartTooltipConfig
+                    }
+                }
+            });
+        }
+
+        // Chart.js: AI Adoption by Industry (Market Analysis)
+        const aiAdoptionByIndustryCtx = document.getElementById('aiAdoptionByIndustryChart')?.getContext('2d');
+        if (aiAdoptionByIndustryCtx) {
+            new Chart(aiAdoptionByIndustryCtx, {
+                type: 'bar',
+                data: {
+                    labels: wrapChartLabels('Health/Education/Manufacturing', 15),
+                    datasets: [{
+                        label: 'Adoption Rate',
+                        data: [45],
+                        backgroundColor: ['#00A000'],
+                        borderColor: ['#007000'],
+                        borderWidth: 1,
+                        barPercentage: 0.5,
+                    }]
+                },
+                options: {
+                    indexAxis: 'y', // Horizontal bar chart
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            max: 100,
+                            title: { display: true, text: 'Percentage of SMEs (%)', color: '#4A4A4A' },
+                            ticks: { color: '#4A4A4A' }
+                        },
+                        y: {
+                            ticks: { color: '#4A4A4A', font: {size: 11} }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        title: {
+                            display: true,
+                            text: 'AI Adoption by Leading Australian Industries',
+                            color: '#4A4A4A',
+                            font: { size: 14, weight: '600' },
+                            padding: { top: 10, bottom: 20 }
+                        },
+                        tooltip: chartTooltipConfig
+                    }
+                }
+            });
+        }
+
+        // Chart.js: Regional AI Awareness Gap (Market Analysis)
+        const regionalAwarenessCtx = document.getElementById('regionalAwarenessChart')?.getContext('2d');
+        if (regionalAwarenessCtx) {
+            new Chart(regionalAwarenessCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Regional SMEs Unaware of AI Potential', 'Metro SMEs Unaware of AI Potential'],
+                    datasets: [{
+                        label: 'Percentage Unaware',
+                        data: [25, 19], // Regional 25% unaware vs Metro 19% unaware
+                        backgroundColor: ['#D98C5F', '#8E8071'], // Muted Terracotta for regional, Muted Brown for metro
+                        borderColor: ['#B06B4A', '#6A6055'],
+                        borderWidth: 1,
+                        barPercentage: 0.5,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 30,
+                            title: { display: true, text: 'Percentage Unaware (%)', color: '#4A4A4A' },
+                            ticks: { color: '#4A4A4A' }
+                        },
+                        x: {
+                            ticks: { color: '#4A4A4A', font: {size: 11} }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        title: {
+                            display: true,
+                            text: 'AI Awareness Gap: Regional vs. Metro SMEs',
+                            color: '#4A4A4A',
+                            font: { size: 14, weight: '600' },
+                            padding: { top: 10, bottom: 20 }
+                        },
+                        tooltip: chartTooltipConfig
+                    }
+                }
+            });
+        }
+
+        // Chart.js: Competitor Customer Satisfaction (Competitive Landscape)
+        const competitorSatisfactionCtx = document.getElementById('competitorSatisfactionChart')?.getContext('2d');
+        if (competitorSatisfactionCtx) {
+            new Chart(competitorSatisfactionCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Crazy Domains', 'Wix', 'Hostinger', 'GoDaddy', 'Squarespace', 'Durable AI', 'Neo'].map(label => wrapChartLabels(label, 12)),
+                    datasets: [{
+                        label: 'Customer Satisfaction (out of 5)',
+                        data: [1.6, 4.7, 4.6, 4.3, 4.1, 3.6, 4.8],
+                        backgroundColor: [
+                            '#D98C5F', // CD (Negative)
+                            '#00A000', // Wix (Positive)
+                            '#00A000', // Hostinger (Positive)
+                            '#00A000', // GoDaddy (Positive)
+                            '#00A000', // Squarespace (Positive)
+                            '#8E8071', // Durable AI (Neutral/Moderate)
+                            '#00A000'  // Neo (Positive)
+                        ],
+                        borderColor: [
+                            '#B06B4A', '#007000', '#007000', '#007000', '#007000', '#6A6055', '#007000'
+                        ],
+                        borderWidth: 1,
+                        barPercentage: 0.7,
+                    }]
+                },
+                options: {
+                    indexAxis: 'y', // Horizontal bar chart
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            max: 5,
+                            title: { display: true, text: 'Rating (out of 5)', color: '#4A4A4A' },
+                            ticks: { color: '#4A4A4A' }
+                        },
+                        y: {
+                            ticks: { color: '#4A4A4A', font: {size: 11} }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        title: {
+                            display: true,
+                            text: 'Competitor Customer Satisfaction Ratings',
+                            color: '#4A4A4A',
+                            font: { size: 14, weight: '600' },
+                            padding: { top: 10, bottom: 20 }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                title: chartTooltipConfig.callbacks.title,
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    label += context.raw.toFixed(1); // Show rating with one decimal
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+
+        // Sticky Navigation Active State & Smooth Scroll
+        const navLinks = document.querySelectorAll('#mainNav a');
+        const sections = document.querySelectorAll('main section');
+
+        function changeNavActiveState() {
+            const navHeight = document.getElementById('mainNav')?.offsetHeight || 0;
+            const scrollY = window.scrollY;
+
+            if (sections.length === 0 || navLinks.length === 0) {
+                return;
+            }
+
+            let currentActiveIndex = 0;
+            for (let i = 0; i < sections.length; i++) {
+                if (sections[i] && (scrollY + navHeight + 50 >= sections[i].offsetTop)) {
+                    currentActiveIndex = i;
+                } else {
+                    break;
+                }
+            }
+
+            navLinks.forEach((link) => link.classList.remove('active'));
+
+            if (navLinks[currentActiveIndex]) {
+                navLinks[currentActiveIndex].classList.add('active');
+            }
+        }
+        
+        navLinks.forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    const navHeight = document.getElementById('mainNav')?.offsetHeight || 0;
+                    const elementPosition = targetElement.getBoundingClientRect().top + window.pageYOffset;
+                    const offsetPosition = elementPosition - navHeight - 20; 
+
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        window.addEventListener('scroll', changeNavActiveState);
+        changeNavActiveState();
+
+        // Toggle Strategic Pillars
+        const togglePillarsBtn = document.getElementById('togglePillarsBtn');
+        const pillarsDiv = document.getElementById('pillarsContainer');
+        if (togglePillarsBtn && pillarsDiv) {
+            togglePillarsBtn.addEventListener('click', () => {
+                pillarsDiv.classList.toggle('hidden');
+                togglePillarsBtn.textContent = pillarsDiv.classList.contains('hidden') ? 'View Key Strategic Pillars' : 'Hide Key Strategic Pillars';
+            });
+        }
+
+    </script>
+</body>
+</html>
